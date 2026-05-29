@@ -31,33 +31,27 @@ export default function AnalysisPanel({ result, loading, error }: Props) {
   if (!result) return null;
 
   const { analysis } = result;
-  const { risk_score, risk_verdict, contract_type, risk_categories, key_terms, flags, suggested_questions } = analysis;
+  const { risk_score, contract_type, risk_categories, key_terms, flags } = analysis;
+  const trust_score = 100 - risk_score;
 
   return (
     <div className="analysis-panel">
 
-      {/* Risk Assessment */}
+      {/* Trust Assessment */}
       <div className="analysis-section">
-        <div className="section-title">Risk Assessment</div>
-        <div className="risk-section-body">
-          <div className="risk-ring-container">
-            <RiskRing score={risk_score} />
-            <span className="risk-verdict-label" style={{ color: scoreColor(risk_score) }}>
-              {contract_type}
+        <div className="section-title">Trust Assessment</div>
+        <div className="trust-header-row">
+          <TrustRing score={trust_score} />
+          <span className="trust-type-label" style={{ color: trustColor(trust_score) }}>
+            {contract_type}
+          </span>
+        </div>
+        <div className="risk-categories">
+          {risk_categories.map((cat, i) => (
+            <span key={i} className="risk-pill" style={pillStyle(cat.level)}>
+              {cat.label}
             </span>
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 15, fontWeight: 600, color: '#111827', marginBottom: 10 }}>
-              {risk_verdict}
-            </div>
-            <div className="risk-categories">
-              {risk_categories.map((cat, i) => (
-                <span key={i} className="risk-pill" style={pillStyle(cat.level)}>
-                  {cat.label}
-                </span>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
@@ -109,39 +103,14 @@ export default function AnalysisPanel({ result, loading, error }: Props) {
           </div>
         )}
       </div>
-
-      {/* Suggested Questions */}
-      {suggested_questions.length > 0 && (
-        <div className="analysis-section">
-          <div className="section-title">Questions to Ask</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {suggested_questions.map((q, i) => (
-              <div
-                key={i}
-                style={{
-                  padding: '10px 14px',
-                  background: '#f0f9ff',
-                  border: '1px solid #bae6fd',
-                  borderRadius: 8,
-                  fontSize: 13,
-                  color: '#0369a1',
-                  lineHeight: 1.5,
-                }}
-              >
-                {q}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
-function scoreColor(score: number): string {
-  if (score >= 70) return '#dc2626';
+function trustColor(score: number): string {
+  if (score >= 70) return '#16a34a';
   if (score >= 40) return '#d97706';
-  return '#16a34a';
+  return '#dc2626';
 }
 
 function severityColor(severity: 'high' | 'medium' | 'low'): string {
@@ -156,16 +125,16 @@ function pillStyle(level: 'high' | 'medium' | 'ok'): React.CSSProperties {
   return { background: '#dcfce7', color: '#166534' };
 }
 
-function RiskRing({ score }: { score: number }) {
+function TrustRing({ score }: { score: number }) {
   const r = 32;
   const cx = 40;
   const cy = 40;
   const circumference = 2 * Math.PI * r;
   const dashOffset = circumference * (1 - score / 100);
-  const color = scoreColor(score);
+  const color = trustColor(score);
 
   return (
-    <svg width="80" height="80" viewBox="0 0 80 80">
+    <svg width="80" height="80" viewBox="0 0 80 80" style={{ flexShrink: 0 }}>
       <circle cx={cx} cy={cy} r={r} fill="none" stroke="#e5e7eb" strokeWidth="8" />
       <circle
         cx={cx} cy={cy} r={r}
@@ -177,11 +146,15 @@ function RiskRing({ score }: { score: number }) {
         strokeLinecap="round"
         transform={`rotate(-90 ${cx} ${cy})`}
       />
-      <text x={cx} y={cy - 4} textAnchor="middle" fill={color} fontSize="20" fontWeight="700">
+      <text
+        x={cx} y={cy}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={color}
+        fontSize="20"
+        fontWeight="700"
+      >
         {score}
-      </text>
-      <text x={cx} y={cy + 13} textAnchor="middle" fill={color} fontSize="10">
-        /100
       </text>
     </svg>
   );

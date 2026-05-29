@@ -345,27 +345,18 @@ body {
   letter-spacing: 0.06em;
 }
 
-/* Risk */
+/* Trust Assessment */
 
-.risk-section-body {
+.trust-header-row {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.risk-ring-container {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
+  gap: 16px;
 }
 
-.risk-verdict-label {
-  font-size: 13px;
+.trust-type-label {
+  font-size: 15px;
   font-weight: 600;
-  text-align: center;
+  line-height: 1.3;
 }
 
 .risk-categories {
