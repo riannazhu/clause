@@ -31,27 +31,41 @@ export default function AnalysisPanel({ result, loading, error }: Props) {
   if (!result) return null;
 
   const { analysis } = result;
-  const { risk_score, contract_type, risk_categories, key_terms, flags } = analysis;
+  const { risk_score, key_terms, flags } = analysis;
   const trust_score = 100 - risk_score;
 
   return (
     <div className="analysis-panel">
 
-      {/* Trust Assessment */}
+      {/* Trust Score */}
       <div className="analysis-section">
-        <div className="section-title">Trust Assessment</div>
-        <div className="trust-header-row">
-          <TrustRing score={trust_score} />
-          <span className="trust-type-label" style={{ color: trustColor(trust_score) }}>
-            {contract_type}
-          </span>
-        </div>
-        <div className="risk-categories">
-          {risk_categories.map((cat, i) => (
-            <span key={i} className="risk-pill" style={pillStyle(cat.level)}>
-              {cat.label}
-            </span>
-          ))}
+        <div className="section-title">Trust Score</div>
+        <div className="trust-card">
+          <div className="trust-body-row">
+            <div className="trust-gauge-wrap">
+              <TrustGauge score={trust_score} />
+            </div>
+            <div className="trust-details">
+              <div className="trust-verdict" style={{ color: lerpColor(trust_score / 100) }}>
+                {trust_score >= 70 ? 'Low Risk' : trust_score >= 40 ? 'Moderate Risk' : 'High Risk'}
+              </div>
+              <div className="trust-flag-count">
+                {flags.length} flag{flags.length !== 1 ? 's' : ''} found
+              </div>
+              <div className="trust-severity-rows">
+                {([
+                  { label: 'high', color: '#ef4444', count: flags.filter(f => f.severity === 'high').length },
+                  { label: 'medium', color: '#f59e0b', count: flags.filter(f => f.severity === 'medium').length },
+                  { label: 'low', color: '#22c55e', count: flags.filter(f => f.severity === 'low').length },
+                ] as const).map(({ label, color, count }) => (
+                  <div key={label} className="trust-sev-item">
+                    <span className="trust-sev-dot" style={{ background: color }} />
+                    <span className="trust-sev-text">{count} {label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -107,12 +121,6 @@ export default function AnalysisPanel({ result, loading, error }: Props) {
   );
 }
 
-function trustColor(score: number): string {
-  if (score >= 70) return '#16a34a';
-  if (score >= 40) return '#d97706';
-  return '#dc2626';
-}
-
 function severityColor(severity: 'high' | 'medium' | 'low'): string {
   if (severity === 'high') return '#ef4444';
   if (severity === 'medium') return '#f59e0b';
@@ -125,35 +133,55 @@ function pillStyle(level: 'high' | 'medium' | 'ok'): React.CSSProperties {
   return { background: '#dcfce7', color: '#166534' };
 }
 
-function TrustRing({ score }: { score: number }) {
-  const r = 32;
-  const cx = 40;
-  const cy = 40;
-  const circumference = 2 * Math.PI * r;
-  const dashOffset = circumference * (1 - score / 100);
-  const color = trustColor(score);
+function lerpColor(t: number): string {
+  const stops: [number, number, number][] = [
+    [220, 38, 38],
+    [234, 88, 12],
+    [202, 138, 4],
+    [22, 163, 74],
+  ];
+  const pos = Math.min(t, 0.9999) * (stops.length - 1);
+  const i = Math.floor(pos);
+  const f = pos - i;
+  const [r1, g1, b1] = stops[i];
+  const [r2, g2, b2] = stops[i + 1];
+  return `rgb(${Math.round(r1 + (r2 - r1) * f)},${Math.round(g1 + (g2 - g1) * f)},${Math.round(b1 + (b2 - b1) * f)})`;
+}
 
+function TrustGauge({ score }: { score: number }) {
+  const cx = 100, cy = 100, r = 76, sw = 16;
+  const START = 150, SWEEP = 240, N = 60;
+
+  function pt(deg: number) {
+    const rad = (deg * Math.PI) / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+
+  function segPath(i: number) {
+    const a1 = START + (i / N) * SWEEP;
+    const a2 = START + ((i + 1) / N) * SWEEP + 0.5;
+    const p1 = pt(a1), p2 = pt(a2);
+    return `M${p1.x.toFixed(2)},${p1.y.toFixed(2)} A${r},${r} 0 0 1 ${p2.x.toFixed(2)},${p2.y.toFixed(2)}`;
+  }
+
+  const active = Math.round((score / 100) * N);
+  const indDeg = START + (score / 100) * SWEEP;
+  const indPt = pt(indDeg);
+  const indColor = lerpColor(score / 100);
   return (
-    <svg width="80" height="80" viewBox="0 0 80 80" style={{ flexShrink: 0 }}>
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#e5e7eb" strokeWidth="8" />
-      <circle
-        cx={cx} cy={cy} r={r}
-        fill="none"
-        stroke={color}
-        strokeWidth="8"
-        strokeDasharray={circumference}
-        strokeDashoffset={dashOffset}
-        strokeLinecap="round"
-        transform={`rotate(-90 ${cx} ${cy})`}
-      />
-      <text
-        x={cx} y={cy}
-        textAnchor="middle"
-        dominantBaseline="central"
-        fill={color}
-        fontSize="20"
-        fontWeight="700"
-      >
+    <svg viewBox="0 0 200 160" width="100%" aria-label={`Trust score: ${score}`}>
+      {Array.from({ length: N }, (_, i) => (
+        <path
+          key={i}
+          d={segPath(i)}
+          fill="none"
+          stroke={i < active ? lerpColor(i / N) : '#eaecef'}
+          strokeWidth={sw}
+          strokeLinecap="butt"
+        />
+      ))}
+      <circle cx={indPt.x} cy={indPt.y} r={sw / 2 + 3} fill="white" stroke={indColor} strokeWidth={2.5} />
+      <text x={cx} y={cy - 10} textAnchor="middle" dominantBaseline="central" fontSize="52" fontWeight="800" fill="#111827" fontFamily="-apple-system, BlinkMacSystemFont, sans-serif">
         {score}
       </text>
     </svg>
