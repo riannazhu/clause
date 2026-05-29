@@ -3,3 +3,4 @@ uvicorn
 pymupdf
 anthropic
 python-multipart
+python-dotenv

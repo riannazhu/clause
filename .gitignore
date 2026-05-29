@@ -6,3 +6,5 @@ frontend/build/
 .env
 .env.local
 *.DS_Store
+.vscode/
+.claude/
