@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import PDFViewer from './components/PDFViewer';
 import AnalysisPanel from './components/AnalysisPanel';
 
@@ -60,7 +60,31 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [splitPct, setSplitPct] = useState(50);
+  const splitDragging = useRef(false);
+  const splitContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      if (!splitDragging.current || !splitContainerRef.current) return;
+      const rect = splitContainerRef.current.getBoundingClientRect();
+      const pct = ((e.clientX - rect.left) / rect.width) * 100;
+      setSplitPct(Math.min(75, Math.max(25, pct)));
+    };
+    const onMouseUp = () => {
+      if (!splitDragging.current) return;
+      splitDragging.current = false;
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+  }, []);
 
   const handleFile = useCallback(async (f: File) => {
     if (f.type !== 'application/pdf') {
@@ -178,11 +202,20 @@ export default function App() {
         </div>
       </header>
 
-      <div className="split-layout">
-        <div className="split-left">
+      <div className="split-layout" ref={splitContainerRef}>
+        <div className="split-left" style={{ width: `${splitPct}%` }}>
           {fileUrl && <PDFViewer url={fileUrl} filename={file.name} />}
         </div>
-        <div className="split-right">
+        <div
+          className="split-divider"
+          onMouseDown={(e) => {
+            e.preventDefault();
+            splitDragging.current = true;
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+          }}
+        />
+        <div className="split-right" style={{ width: `${100 - splitPct}%` }}>
           <AnalysisPanel result={result} loading={loading} error={error} />
         </div>
       </div>
