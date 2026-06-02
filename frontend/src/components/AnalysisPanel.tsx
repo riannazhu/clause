@@ -1,5 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import type { AnalysisResult } from '../App';
+
+const LOADING_MSGS = [
+  'Analyzing contract…',
+  'Identifying key terms…',
+  'Scanning for red flags…',
+  'Assessing risk factors…',
+  'Reviewing clauses…',
+  'Checking standard practices…',
+  'Cross-referencing obligations…',
+  'Almost there…',
+];
 
 interface Props {
   result: AnalysisResult | null;
@@ -8,6 +19,33 @@ interface Props {
 }
 
 export default function AnalysisPanel({ result, loading, error }: Props) {
+  const [msgIdx, setMsgIdx] = useState(0);
+  const [displayed, setDisplayed] = useState('');
+  const [phase, setPhase] = useState<'typing' | 'pausing' | 'deleting'>('typing');
+
+  useEffect(() => {
+    if (!loading) { setDisplayed(''); setMsgIdx(0); setPhase('typing'); return; }
+    const msg = LOADING_MSGS[msgIdx];
+
+    if (phase === 'typing') {
+      if (displayed.length < msg.length) {
+        const id = setTimeout(() => setDisplayed(msg.slice(0, displayed.length + 1)), 48);
+        return () => clearTimeout(id);
+      }
+      const id = setTimeout(() => setPhase('deleting'), 1400);
+      return () => clearTimeout(id);
+    }
+
+    if (phase === 'deleting') {
+      if (displayed.length > 0) {
+        const id = setTimeout(() => setDisplayed(d => d.slice(0, -1)), 28);
+        return () => clearTimeout(id);
+      }
+      setMsgIdx(i => (i + 1) % LOADING_MSGS.length);
+      setPhase('typing');
+    }
+  }, [loading, displayed, msgIdx, phase]);
+
   if (loading) {
     return (
       <div
@@ -15,7 +53,9 @@ export default function AnalysisPanel({ result, loading, error }: Props) {
         style={{ alignItems: 'center', justifyContent: 'center', minHeight: 300 }}
       >
         <div className="spinner" />
-        <p style={{ color: 'var(--text-2)', marginTop: 12, fontSize: 12 }}>Analyzing contract…</p>
+        <p style={{ color: 'var(--text-2)', marginTop: 12, fontSize: 12 }}>
+          {displayed}<span className="loading-cursor">|</span>
+        </p>
       </div>
     );
   }

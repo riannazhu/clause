@@ -36,6 +36,15 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.loading-cursor {
+  display: inline-block;
+  font-weight: 300;
+  color: var(--indigo);
+  animation: blink 1s step-end infinite;
+  margin-left: 1px;
+}
 
 /* ── Upload page ─────────────────────────────────────────────── */
 
@@ -370,10 +379,10 @@ body {
 .trust-details { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 
 .trust-verdict {
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   color: var(--text);
 }
 

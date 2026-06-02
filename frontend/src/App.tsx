@@ -41,9 +41,9 @@ function LogoIcon() {
         </linearGradient>
       </defs>
       <circle cx="15" cy="15" r="15" fill="url(#lg)" />
-      {/* Geometric 'c' — radius 6, gap 70° centred on the right */}
+      {/* Geometric 'c' — radius 7, gap 70°, points verified on circle */}
       <path
-        d="M19.3 11.4 A6 6 0 1 0 19.3 18.6"
+        d="M20.7 11.0 A7 7 0 1 0 20.7 19.0"
         stroke="white"
         strokeWidth="2.8"
         strokeLinecap="round"
@@ -105,7 +105,7 @@ export default function App() {
         <div className="upload-hero">
           <div className="upload-wordmark">
             <LogoIcon />
-            <span className="upload-brand-name">clause</span>
+            <span className="upload-brand-name">Clause</span>
           </div>
           <h1 className="upload-headline">From legalese to legal ease.</h1>
           <p className="upload-tagline">AI-powered contract review · Not legal advice</p>
@@ -166,7 +166,7 @@ export default function App() {
       <header className="topbar">
         <div className="topbar-logo">
           <LogoIcon />
-          <div className="topbar-name">clause</div>
+          <div className="topbar-name">Clause</div>
         </div>
         <div className="topbar-right">
           {file && (
