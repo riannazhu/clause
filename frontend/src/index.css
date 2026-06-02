@@ -9,9 +9,9 @@
   --text:      #1d1d1f;
   --text-2:    #6e6e73;
   --text-3:    #aeaeb2;
-  --indigo:    #5756d6;
+  --indigo:    #6366f1;
   --label:     #1d1d1f;
-  --indigo-dim:rgba(87, 86, 214, 0.1);
+  --indigo-dim:rgba(99, 102, 241, 0.1);
   --gold:      #b45309;
   --gold-glow: rgba(180, 83, 9, 0.07);
   --r-high:    #ef4444;
@@ -616,11 +616,10 @@ body {
 
 .flag-badge {
   flex-shrink: 0;
-  padding: 2px 7px;
+  padding: 2px 8px;
   font-size: 10px;
   font-weight: 600;
-  color: #fff;
-  border-radius: 4px;
+  border-radius: 20px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }

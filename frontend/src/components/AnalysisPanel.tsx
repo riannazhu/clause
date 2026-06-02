@@ -138,7 +138,7 @@ export default function AnalysisPanel({ result, loading, error }: Props) {
                 <div className="flag-header">
                   <span
                     className="flag-badge"
-                    style={{ background: severityColor(flag.severity) }}
+                    style={flagBadgeStyle(flag.severity)}
                   >
                     {flag.severity}
                   </span>
@@ -165,6 +165,12 @@ function severityColor(severity: 'high' | 'medium' | 'low'): string {
   if (severity === 'high') return '#ef4444';
   if (severity === 'medium') return '#f59e0b';
   return '#22c55e';
+}
+
+function flagBadgeStyle(severity: 'high' | 'medium' | 'low'): React.CSSProperties {
+  if (severity === 'high')   return { background: '#fee2e2', color: '#991b1b' };
+  if (severity === 'medium') return { background: '#fef3c7', color: '#92400e' };
+  return { background: '#dcfce7', color: '#166534' };
 }
 
 function pillStyle(level: 'high' | 'medium' | 'ok'): React.CSSProperties {
