@@ -94,9 +94,9 @@ export default function AnalysisPanel({ result, loading, error }: Props) {
               </div>
               <div className="trust-severity-rows">
                 {([
-                  { label: 'high', color: '#ef4444', count: flags.filter(f => f.severity === 'high').length },
+                  { label: 'high',   color: '#ef4444', count: flags.filter(f => f.severity === 'high').length },
                   { label: 'medium', color: '#f59e0b', count: flags.filter(f => f.severity === 'medium').length },
-                  { label: 'low', color: '#22c55e', count: flags.filter(f => f.severity === 'low').length },
+                  { label: 'low',    color: '#22c55e', count: flags.filter(f => f.severity === 'low').length },
                 ] as const).map(({ label, color, count }) => (
                   <div key={label} className="trust-sev-item">
                     <span className="trust-sev-dot" style={{ background: color }} />
@@ -162,9 +162,9 @@ export default function AnalysisPanel({ result, loading, error }: Props) {
 }
 
 function severityColor(severity: 'high' | 'medium' | 'low'): string {
-  if (severity === 'high') return '#d70015';
-  if (severity === 'medium') return '#c05000';
-  return '#1c7a3a';
+  if (severity === 'high') return '#ef4444';
+  if (severity === 'medium') return '#f59e0b';
+  return '#22c55e';
 }
 
 function pillStyle(level: 'high' | 'medium' | 'ok'): React.CSSProperties {

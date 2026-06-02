@@ -26,6 +26,7 @@ export interface AnalysisResult {
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
+
 function formatSize(bytes: number): string {
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
   return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
@@ -60,7 +61,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [splitPct, setSplitPct] = useState(50);
+  const [splitPct, setSplitPct] = useState(42);
   const splitDragging = useRef(false);
   const splitContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -197,6 +198,7 @@ export default function App() {
             <span className="filename-badge">
               {file.name} · {formatSize(file.size)}
             </span>
+
           )}
           <button className="btn-reset" onClick={reset}>New contract</button>
         </div>
@@ -204,7 +206,7 @@ export default function App() {
 
       <div className="split-layout" ref={splitContainerRef}>
         <div className="split-left" style={{ width: `${splitPct}%` }}>
-          {fileUrl && <PDFViewer url={fileUrl} filename={file.name} />}
+          {fileUrl && <PDFViewer url={fileUrl} filename={file!.name} />}
         </div>
         <div
           className="split-divider"
