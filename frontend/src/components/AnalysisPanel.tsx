@@ -15,7 +15,7 @@ export default function AnalysisPanel({ result, loading, error }: Props) {
         style={{ alignItems: 'center', justifyContent: 'center', minHeight: 300 }}
       >
         <div className="spinner" />
-        <p style={{ color: '#6b7280', marginTop: 12 }}>Analyzing contract…</p>
+        <p style={{ color: 'var(--text-2)', marginTop: 12, fontSize: 12 }}>Analyzing contract…</p>
       </div>
     );
   }
@@ -122,14 +122,14 @@ export default function AnalysisPanel({ result, loading, error }: Props) {
 }
 
 function severityColor(severity: 'high' | 'medium' | 'low'): string {
-  if (severity === 'high') return '#ef4444';
-  if (severity === 'medium') return '#f59e0b';
-  return '#22c55e';
+  if (severity === 'high') return '#d70015';
+  if (severity === 'medium') return '#c05000';
+  return '#1c7a3a';
 }
 
 function pillStyle(level: 'high' | 'medium' | 'ok'): React.CSSProperties {
   if (level === 'high') return { background: '#fee2e2', color: '#991b1b' };
-  if (level === 'medium') return { background: '#fef9c3', color: '#92400e' };
+  if (level === 'medium') return { background: '#ffedd5', color: '#9a3412' };
   return { background: '#dcfce7', color: '#166534' };
 }
 
@@ -175,13 +175,13 @@ function TrustGauge({ score }: { score: number }) {
           key={i}
           d={segPath(i)}
           fill="none"
-          stroke={i < active ? lerpColor(i / N) : '#eaecef'}
+          stroke={i < active ? lerpColor(i / N) : '#e5e7eb'}
           strokeWidth={sw}
           strokeLinecap="butt"
         />
       ))}
       <circle cx={indPt.x} cy={indPt.y} r={sw / 2 + 3} fill="white" stroke={indColor} strokeWidth={2.5} />
-      <text x={cx} y={cy - 10} textAnchor="middle" dominantBaseline="central" fontSize="52" fontWeight="800" fill="#111827" fontFamily="-apple-system, BlinkMacSystemFont, sans-serif">
+      <text x={cx} y={cy - 10} textAnchor="middle" dominantBaseline="central" fontSize="52" fontWeight="700" fill="#1d1d1f" fontFamily="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif">
         {score}
       </text>
     </svg>

@@ -33,11 +33,22 @@ function formatSize(bytes: number): string {
 
 function LogoIcon() {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="6" fill="#6366f1" />
-      <path d="M8 7h7.5L20 11.5V21H8V7z" fill="white" fillOpacity="0.95" />
-      <path d="M15.5 7v4.5H20" stroke="#6366f1" strokeWidth="1.2" fill="none" />
-      <path d="M10 14.5h8M10 17.5h5.5" stroke="#6366f1" strokeWidth="1.2" strokeLinecap="round" />
+    <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+      <defs>
+        <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#818cf8" />
+          <stop offset="100%" stopColor="#4f46e5" />
+        </linearGradient>
+      </defs>
+      <circle cx="15" cy="15" r="15" fill="url(#lg)" />
+      {/* Geometric 'c' — radius 6, gap 70° centred on the right */}
+      <path
+        d="M19.3 11.4 A6 6 0 1 0 19.3 18.6"
+        stroke="white"
+        strokeWidth="2.8"
+        strokeLinecap="round"
+        fill="none"
+      />
     </svg>
   );
 }
@@ -88,12 +99,16 @@ export default function App() {
   if (!file) {
     return (
       <div className="upload-page">
-        <div className="upload-header">
-          <div className="logo">
+        <div className="upload-blob upload-blob--1" aria-hidden="true" />
+        <div className="upload-blob upload-blob--2" aria-hidden="true" />
+        <div className="upload-blob upload-blob--3" aria-hidden="true" />
+        <div className="upload-hero">
+          <div className="upload-wordmark">
             <LogoIcon />
-            <span className="logo-text">ContractScan</span>
+            <span className="upload-brand-name">clause</span>
           </div>
-          <span className="logo-tagline">AI-powered contract analysis · Not legal advice</span>
+          <h1 className="upload-headline">From legalese to legal ease.</h1>
+          <p className="upload-tagline">AI-powered contract review · Not legal advice</p>
         </div>
 
         <div
@@ -115,13 +130,16 @@ export default function App() {
           }}
         >
           <div className="dropzone-prompt">
-            <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-              <rect width="44" height="44" rx="10" fill="#f3f4f6" />
-              <path d="M14 13h11l7 7v11a1 1 0 01-1 1H14a1 1 0 01-1-1V14a1 1 0 011-1z" fill="#9ca3af" />
-              <path d="M25 13v7h7" fill="none" stroke="#6b7280" strokeWidth="1.5" />
-            </svg>
-            <span className="dropzone-main-text">Drop your contract here</span>
-            <span className="dropzone-sub-text">or click to browse</span>
+            <div className="dropzone-icon-bg">
+              <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                <path d="M13 17V7M13 7L8 12M13 7l5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 21h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <div className="dropzone-text-group">
+              <span className="dropzone-main-text">Drop your contract here</span>
+              <span className="dropzone-sub-text">or <span className="dropzone-link">click to browse</span></span>
+            </div>
             <span className="dropzone-hint">PDF · max 10 MB</span>
           </div>
         </div>
@@ -148,10 +166,7 @@ export default function App() {
       <header className="topbar">
         <div className="topbar-logo">
           <LogoIcon />
-          <div>
-            <div className="topbar-name">ContractScan</div>
-            <div className="topbar-tagline">AI-powered contract analysis · Not legal advice</div>
-          </div>
+          <div className="topbar-name">clause</div>
         </div>
         <div className="topbar-right">
           {file && (
