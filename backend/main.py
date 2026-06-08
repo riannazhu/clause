@@ -63,12 +63,19 @@ key_terms must always include: contract type, parties, effective date, duration,
 suggested_questions must be exactly 3 questions specific to the flags found."""
 
 
-SEVERITY_POINTS = {"high": 25, "medium": 10, "low": 5}
+SEVERITY_WEIGHTS = {"high": 23, "medium": 9, "low": 4}
+_DECAY = 0.5
 
 
 def compute_risk_score(flags: list) -> int:
-    total = sum(SEVERITY_POINTS.get(f.get("severity", "low"), 5) for f in flags)
-    return min(total, 100)
+    from collections import Counter
+    counts = Counter(f.get("severity", "low") for f in flags)
+    total = 0.0
+    for sev, n in counts.items():
+        w = SEVERITY_WEIGHTS.get(sev, 4)
+        # geometric series: first flag = w, each subsequent = w * 0.5^i
+        total += w * (1 - _DECAY ** n) / (1 - _DECAY)
+    return min(100, round(total))
 
 
 def extract_json(text: str) -> dict:
