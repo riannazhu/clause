@@ -38,7 +38,6 @@ Standard practices reference:
 Schema:
 {
   "contract_type": string,
-  "risk_score": integer (0-100, higher = riskier),
   "risk_verdict": string,
   "risk_categories": [{ "label": string, "level": "high" | "medium" | "ok" }],
   "key_terms": [{ "label": string, "value": string }],
@@ -55,8 +54,15 @@ Schema:
 }
 
 key_terms must always include: contract type, parties, effective date, duration, governing law, dispute resolution, expiry date, auto-renewal (yes/no + terms), termination notice period.
-suggested_questions must be exactly 3 questions specific to the flags found.
-risk_score based on number and severity of flags and deviation from standard practices."""
+suggested_questions must be exactly 3 questions specific to the flags found."""
+
+
+SEVERITY_POINTS = {"high": 25, "medium": 10, "low": 5}
+
+
+def compute_risk_score(flags: list) -> int:
+    total = sum(SEVERITY_POINTS.get(f.get("severity", "low"), 5) for f in flags)
+    return min(total, 100)
 
 
 def extract_json(text: str) -> dict:
@@ -133,6 +139,7 @@ async def analyze(file: UploadFile = File(...)):
 
     try:
         analysis = run_analysis(contract_text)
+        analysis["risk_score"] = compute_risk_score(analysis.get("flags", []))
     except json.JSONDecodeError:
         raise HTTPException(status_code=502, detail="LLM returned malformed JSON after retry.")
     except Exception as e:
