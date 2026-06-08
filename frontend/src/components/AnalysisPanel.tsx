@@ -16,9 +16,10 @@ interface Props {
   result: AnalysisResult | null;
   loading: boolean;
   error: string | null;
+  onReset: () => void;
 }
 
-export default function AnalysisPanel({ result, loading, error }: Props) {
+export default function AnalysisPanel({ result, loading, error, onReset }: Props) {
   const [msgIdx, setMsgIdx] = useState(0);
   const [displayed, setDisplayed] = useState('');
   const [phase, setPhase] = useState<'typing' | 'pausing' | 'deleting'>('typing');
@@ -61,9 +62,20 @@ export default function AnalysisPanel({ result, loading, error }: Props) {
   }
 
   if (error) {
+    const message = error.replace(/^Analysis failed:\s*\d+:\s*/i, '');
     return (
-      <div className="analysis-panel">
-        <div className="upload-error">{error}</div>
+      <div className="analysis-panel" style={{ alignItems: 'center', justifyContent: 'center', minHeight: 300 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, maxWidth: 320, textAlign: 'center' }}>
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="24" r="22" stroke="#ef4444" strokeWidth="2" fill="#fee2e2" />
+            <path d="M24 14v14" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
+            <circle cx="24" cy="33" r="1.5" fill="#ef4444" />
+          </svg>
+          <p style={{ margin: 0, fontSize: 15, fontWeight: 600, color: '#111' }}>{message}</p>
+          <button className="btn-reset" style={{ marginTop: 4 }} onClick={onReset}>
+            Upload new contract
+          </button>
+        </div>
       </div>
     );
   }

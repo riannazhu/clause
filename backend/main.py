@@ -35,8 +35,14 @@ Standard practices reference:
 - Internship offer: Paid unless meeting strict unpaid criteria, clear start/end dates, no overly broad IP or NDA clauses, no non-compete for interns.
 - Lease: Security deposit capped at 2 months, landlord entry notice (24-48 hours), clear maintenance responsibilities, no waiver of habitability warranty.
 
+If the document is not a legal contract (e.g. it's a resume, article, image, form, or other non-contract), return ONLY:
+{"is_contract": false}
+
+Otherwise return the full schema below with "is_contract": true.
+
 Schema:
 {
+  "is_contract": true,
   "contract_type": string,
   "risk_verdict": string,
   "risk_categories": [{ "label": string, "level": "high" | "medium" | "ok" }],
@@ -139,6 +145,8 @@ async def analyze(file: UploadFile = File(...)):
 
     try:
         analysis = run_analysis(contract_text)
+        if not analysis.get("is_contract", True):
+            raise HTTPException(status_code=422, detail="This doesn't appear to be a contract. Please upload a legal contract document.")
         analysis["risk_score"] = compute_risk_score(analysis.get("flags", []))
     except json.JSONDecodeError:
         raise HTTPException(status_code=502, detail="LLM returned malformed JSON after retry.")

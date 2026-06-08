@@ -101,9 +101,14 @@ export default function App() {
     try {
       const fd = new FormData();
       fd.append('file', f);
-      const res = await fetch(`${API_URL}/analyze`, { method: 'POST', body: fd });
+      let res: Response;
+      try {
+        res = await fetch(`${API_URL}/analyze`, { method: 'POST', body: fd });
+      } catch {
+        throw new Error('Cannot connect to the server. Make sure the backend is running.');
+      }
       const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || 'Analysis failed.');
+      if (!res.ok) throw new Error(data.detail || 'Analysis failed. Please try again.');
       setResult(data);
     } catch (e: any) {
       setError(e.message || 'Something went wrong.');
@@ -218,7 +223,7 @@ export default function App() {
           }}
         />
         <div className="split-right" style={{ width: `${100 - splitPct}%` }}>
-          <AnalysisPanel result={result} loading={loading} error={error} />
+          <AnalysisPanel result={result} loading={loading} error={error} onReset={reset} />
         </div>
       </div>
     </div>
