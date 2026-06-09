@@ -194,7 +194,7 @@ export default function App() {
   return (
     <div className="analysis-layout">
       <header className="topbar">
-        <div className="topbar-logo">
+        <div className="topbar-logo" onClick={reset} style={{ cursor: 'pointer' }}>
           <LogoIcon />
           <div className="topbar-name">Clause</div>
         </div>
