@@ -2,10 +2,21 @@
 
 AI-powered contract review. Upload a PDF contract and get an instant risk score, flagged issues, key terms, and a chatbot to ask questions about the document.
 
-![Landing page](assets/landing.png)
-![Analysis view](assets/main.png)
-![Chatbot](assets/chatbot.png)
-![Flag details](assets/flags.png)
+**Upload** a contract PDF and get an instant analysis — no account needed.
+
+<img src="assets/landing.png" width="600" alt="Landing page" />
+
+**Risk score, key terms, and flagged clauses** — all extracted and ranked by severity.
+
+<img src="assets/main.png" width="600" alt="Analysis view" />
+
+**Ask Claude** questions about the contract in plain English via the floating chatbot.
+
+<img src="assets/chatbot.png" width="300" alt="Chatbot" />
+
+**Flags** are categorized as high, medium, or low severity with the relevant clause quoted.
+
+<img src="assets/flags.png" width="600" alt="Flag details" />
 
 ## Stack
 
