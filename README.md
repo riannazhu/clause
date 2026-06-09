@@ -4,6 +4,8 @@ AI-powered contract review. Upload a PDF contract and get an instant risk score,
 
 **[tryclause.vercel.app](https://tryclause.vercel.app)**
 
+## Demo
+
 Upload a contract.
 
 <p align="center"><img src="assets/landing.png" width="600" alt="Landing page" /></p>
