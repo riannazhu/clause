@@ -186,12 +186,6 @@ function flagBadgeStyle(severity: 'high' | 'medium' | 'low'): React.CSSPropertie
   return { background: '#dcfce7', color: '#166534' };
 }
 
-function pillStyle(level: 'high' | 'medium' | 'ok'): React.CSSProperties {
-  if (level === 'high') return { background: '#fee2e2', color: '#991b1b' };
-  if (level === 'medium') return { background: '#ffedd5', color: '#9a3412' };
-  return { background: '#dcfce7', color: '#166534' };
-}
-
 function lerpColor(t: number): string {
   const stops: [number, number, number][] = [
     [220, 38, 38],
