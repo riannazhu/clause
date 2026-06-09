@@ -4,19 +4,19 @@ AI-powered contract review. Upload a PDF contract and get an instant risk score,
 
 **Upload** a contract PDF and get an instant analysis — no account needed.
 
-<img src="assets/landing.png" width="600" alt="Landing page" />
+<p align="center"><img src="assets/landing.png" width="600" alt="Landing page" /></p>
 
 **Risk score, key terms, and flagged clauses** — all extracted and ranked by severity.
 
-<img src="assets/main.png" width="600" alt="Analysis view" />
+<p align="center"><img src="assets/main.png" width="600" alt="Analysis view" /></p>
 
-**Ask Claude** questions about the contract in plain English via the floating chatbot.
+**Ask Claude** questions in plain English, and see flagged clauses with severity levels and quoted contract text.
 
-<img src="assets/chatbot.png" width="300" alt="Chatbot" />
-
-**Flags** are categorized as high, medium, or low severity with the relevant clause quoted.
-
-<img src="assets/flags.png" width="600" alt="Flag details" />
+<p align="center">
+  <img src="assets/chatbot.png" height="400" alt="Chatbot" />
+  &nbsp;&nbsp;
+  <img src="assets/flags.png" height="400" alt="Flag details" />
+</p>
 
 ## Stack
 
