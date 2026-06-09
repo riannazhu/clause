@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import PDFViewer from './components/PDFViewer';
 import AnalysisPanel from './components/AnalysisPanel';
+import ChatOverlay from './components/ChatOverlay';
 
 export interface Analysis {
   contract_type: string;
@@ -209,6 +210,13 @@ export default function App() {
         </div>
       </header>
 
+      {result && (
+        <ChatOverlay
+          contractText={result.contract_text}
+          suggestedQuestions={result.analysis.suggested_questions}
+          apiUrl={API_URL}
+        />
+      )}
       <div className="split-layout" ref={splitContainerRef}>
         <div className="split-left" style={{ width: `${splitPct}%` }}>
           {fileUrl && <PDFViewer url={fileUrl} filename={file!.name} />}

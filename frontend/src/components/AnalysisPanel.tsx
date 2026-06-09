@@ -169,6 +169,7 @@ export default function AnalysisPanel({ result, loading, error, onReset }: Props
           </div>
         )}
       </div>
+
     </div>
   );
 }

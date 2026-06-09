@@ -122,6 +122,28 @@ def run_analysis(contract_text: str) -> dict:
         return extract_json(retry.content[0].text)
 
 
+CHAT_SYSTEM = """You are a contract analysis assistant. You are not a lawyer and do not provide legal advice.
+Answer questions based only on the contract text provided. Be concise and direct — 2 to 4 sentences max.
+If something isn't addressed in the contract, say so clearly.
+Write in plain prose. No markdown, no bullet points, no headers, no bold or italic formatting."""
+
+
+class ChatRequest(BaseModel):
+    contract_text: str
+    messages: list[dict]
+
+
+@app.post("/chat")
+async def chat(req: ChatRequest):
+    message = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=1024,
+        system=CHAT_SYSTEM + f"\n\nContract text:\n{req.contract_text}",
+        messages=req.messages,
+    )
+    return {"reply": message.content[0].text}
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
