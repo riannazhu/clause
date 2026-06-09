@@ -3,8 +3,8 @@
 AI-powered contract review. Upload a PDF contract and get an instant risk score, flagged issues, key terms, and a chatbot to ask questions about the document.
 
 ![Landing page](assets/landing.png)
-![Analysis view](assets/analysis.png)
-![Chatbot](assets/chat.png)
+![Analysis view](assets/main.png)
+![Chatbot](assets/chatbot.png)
 ![Flag details](assets/flags.png)
 
 ## Stack
