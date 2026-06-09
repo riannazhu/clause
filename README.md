@@ -2,6 +2,8 @@
 
 AI-powered contract review. Upload a PDF contract and get an instant risk score, flagged issues, key terms, and a chatbot to ask questions about the document.
 
+**[tryclause.vercel.app](https://tryclause.vercel.app)**
+
 Upload a contract.
 
 <p align="center"><img src="assets/landing.png" width="600" alt="Landing page" /></p>
@@ -14,7 +16,7 @@ Ask Claude questions and see categorized flags with quoted contract text.
 
 <p align="center">
   <img src="assets/chatbot.png" height="400" alt="Chatbot" />
-  &nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <img src="assets/flags.png" height="400" alt="Flag details" />
 </p>
 
@@ -66,7 +68,3 @@ PORT=3001 npm start
 ```
 
 Open `http://localhost:3001`.
-
-## Deployment
-
-Hosted on [Render](https://render.com) (backend) and [Vercel](https://vercel.com) (frontend).
